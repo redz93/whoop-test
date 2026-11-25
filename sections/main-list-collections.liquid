@@ -1,0 +1,16 @@
+<section class="section" style="padding-top:calc(var(--head) + 32px)">
+  <div class="wrap">
+    <h1 class="display" style="font-size:clamp(2.4rem,8vw,6.5rem);margin-bottom:40px">{{ 'general.collections' | t }}</h1>
+    <div class="tiles">
+      {%- for c in collections -%}{%- if c.handle != 'frontpage' -%}
+        <a class="tile" href="{{ c.url }}" style="grid-column:span 2">
+          {%- if c.featured_image -%}{{ c.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}
+          <h3>{{ c.title }}</h3><p>{{ c.description | strip_html | truncate: 80 }}</p><span class="cta">{{ 'general.discover' | t }} <span aria-hidden="true">→</span></span>
+        </a>{%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{"name":"Liste des collections"}
+{% endschema %}

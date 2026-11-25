@@ -1,0 +1,19 @@
+{%- liquid
+  assign desc = page_description | default: shop.description | escape
+  assign og_title = page_title | escape
+  assign og_img = settings.favicon
+  if template.name == 'product' and product.featured_image
+    assign og_img = product.featured_image
+  elsif template.name == 'collection' and collection.image
+    assign og_img = collection.image
+  endif
+-%}
+{%- if desc != blank -%}<meta name="description" content="{{ desc | truncate: 160 }}">{%- endif -%}
+<meta property="og:site_name" content="{{ shop.name | escape }}">
+<meta property="og:url" content="{{ canonical_url }}">
+<meta property="og:title" content="{{ og_title }}">
+<meta property="og:type" content="{% if template.name == 'product' %}product{% else %}website{% endif %}">
+{%- if desc != blank -%}<meta property="og:description" content="{{ desc | truncate: 200 }}">{%- endif -%}
+{%- if og_img != blank -%}<meta property="og:image" content="https:{{ og_img | image_url: width: 1200 }}">{%- endif -%}
+<meta name="twitter:card" content="summary_large_image">
+{%- if template.name == 'product' -%}<script type="application/ld+json">{{ product | structured_data }}</script>{%- endif -%}

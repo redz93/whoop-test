@@ -1,0 +1,1 @@
+{"sections":{"main":{"type":"main-product"},"complementary":{"type":"product-recommendations","settings":{"heading":"Complète ton look","intent":"complementary"}},"related":{"type":"product-recommendations","settings":{"heading":"Tu pourrais aussi aimer","intent":"related"}}},"order":["main","complementary","related"]}

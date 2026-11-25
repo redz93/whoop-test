@@ -1,0 +1,30 @@
+{%- comment -%} PLACEHOLDER : les avis par défaut sont fictifs. Remplacez-les (ou utilisez un bloc d'application d'avis) avant publication. {%- endcomment -%}
+<section class="section" data-placeholder="{{ section.settings.is_placeholder }}">
+  <div class="wrap">
+    <div class="head-row reveal"><h2 class="h2">{{ section.settings.heading }}</h2></div>
+    <div class="quotes">
+      {%- for block in section.blocks -%}
+        {%- if block.type == '@app' -%}{% render block %}{%- else -%}
+        <figure class="quote reveal" style="margin:0;--d:{{ forloop.index0 | times: 0.08 }}s" {{ block.shopify_attributes }}>
+          <div class="stars" role="img" aria-label="{{ block.settings.rating }}/5">{%- for i in (1..block.settings.rating) -%}★{%- endfor -%}</div>
+          <blockquote>{{ block.settings.quote }}</blockquote>
+          <figcaption><cite>{{ block.settings.author }}</cite></figcaption>
+        </figure>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{"name":"Avis clients","settings":[
+{"type":"text","id":"heading","label":"Titre","default":"Ils ont changé de look"},
+{"type":"checkbox","id":"is_placeholder","label":"Contenu fictif (à remplacer avant publication)","default":true},
+{"type":"paragraph","content":"Pour des avis réels : ajoutez un bloc d'application (Judge.me, Loox, Yotpo…) ou remplacez les textes ci-dessous."}],
+"blocks":[{"type":"review","name":"Avis","settings":[
+{"type":"textarea","id":"quote","label":"Avis"},{"type":"text","id":"author","label":"Auteur"},{"type":"range","id":"rating","label":"Note","min":1,"max":5,"step":1,"default":5}]},{"type":"@app"}],
+"max_blocks":6,
+"presets":[{"name":"Avis clients","blocks":[
+{"type":"review","settings":{"quote":"[PLACEHOLDER] Texte d'avis à remplacer.","author":"Prénom N."}},
+{"type":"review","settings":{"quote":"[PLACEHOLDER] Texte d'avis à remplacer.","author":"Prénom N."}},
+{"type":"review","settings":{"quote":"[PLACEHOLDER] Texte d'avis à remplacer.","author":"Prénom N."}}]}]}
+{% endschema %}

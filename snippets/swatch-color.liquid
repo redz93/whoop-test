@@ -1,0 +1,8 @@
+{%- assign out = '#888888' -%}
+{%- assign want = value | strip | downcase -%}
+{%- assign lines = settings.swatch_map | newline_to_br | split: '<br />' -%}
+{%- for l in lines -%}
+  {%- assign kv = l | strip | split: ':' -%}
+  {%- if kv.size == 2 -%}{%- assign k = kv[0] | strip | downcase -%}{%- if k == want -%}{%- assign out = kv[1] | strip -%}{%- endif -%}{%- endif -%}
+{%- endfor -%}
+{{- out -}}

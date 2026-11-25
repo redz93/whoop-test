@@ -1,0 +1,12 @@
+<section class="section">
+  <div class="wrap">
+    <div class="nl reveal">
+      <h2 class="display" style="font-size:clamp(2.4rem,7vw,6rem)">{{ section.settings.heading }}</h2>
+      <p class="lead" style="margin:18px auto 0">{{ section.settings.text }}</p>
+      {% render 'newsletter-form', form_id: section.id %}
+    </div>
+  </div>
+</section>
+{% schema %}
+{"name":"Newsletter","settings":[{"type":"text","id":"heading","label":"Titre","default":"Stay in the loop."},{"type":"text","id":"text","label":"Texte","default":"Nouveautés, drops exclusifs et nouvelles couleurs."}],"presets":[{"name":"Newsletter"}]}
+{% endschema %}

@@ -1,0 +1,53 @@
+{%- comment -%} Params : product, eager (bool) {%- endcomment -%}
+{%- liquid
+  assign color_idx = -1
+  assign color_opt = nil
+  for o in product.options_with_values
+    assign n = o.name | downcase
+    if n == 'couleur' or n == 'color' or n == 'colour' or n == 'coloris'
+      assign color_idx = forloop.index0
+      assign color_opt = o
+    endif
+  endfor
+  assign quick = false
+  if product.has_only_default_variant or product.options.size == 1
+    assign quick = true
+  endif
+  assign fv = product.selected_or_first_available_variant
+  assign ld = eager | default: 'lazy'
+  assign alt_txt = product.featured_media.alt | default: product.title
+-%}
+<article class="card">
+  <a class="card__media" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+    {%- if product.featured_media -%}
+      {{ product.featured_media | image_url: width: 900 | image_tag: widths: '360, 540, 720, 900', sizes: '(min-width:1000px) 30vw, 50vw', loading: ld, alt: alt_txt }}
+      {%- if product.media[1] -%}{{ product.media[1] | image_url: width: 900 | image_tag: widths: '360, 540, 720, 900', sizes: '(min-width:1000px) 30vw, 50vw', loading: 'lazy', alt: '' }}{%- endif -%}
+    {%- else -%}<div class="ph"></div>{%- endif -%}
+    {%- if product.compare_at_price > product.price and product.available -%}<span class="tag tag--sale">{{ 'products.sale' | t }}</span>
+    {%- elsif product.available == false -%}<span class="tag">{{ 'products.sold_out' | t }}</span>
+    {%- elsif product.tags contains 'new' -%}<span class="tag">{{ 'products.new' | t }}</span>{%- endif -%}
+  </a>
+  <div class="card__body">
+    <a class="card__title" href="{{ product.url }}">{{ product.title }}</a>
+    <span class="price">{% render 'price', price: product.price, compare_at_price: product.compare_at_price %}</span>
+  </div>
+  <div class="card__row">
+    {%- if color_idx >= 0 and color_opt.values.size > 1 -%}
+      <div class="swatches" role="group" aria-label="{{ color_opt.name | escape }}">
+        {%- for val in color_opt.values -%}
+          {%- assign vv = nil -%}
+          {%- for v in product.variants -%}{%- if v.options[color_idx] == val and vv == nil -%}{%- assign vv = v -%}{%- endif -%}{%- endfor -%}
+          {%- capture sw_color -%}{% render 'swatch-color', value: val %}{%- endcapture -%}
+          <button type="button" class="sw{% unless vv.available %} is-out{% endunless %}" style="--sw:{{ sw_color }}" aria-label="{{ val | escape }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
+            data-card-swatch data-variant-id="{{ vv.id }}" data-available="{{ vv.available }}"
+            {%- if vv.featured_image %} data-image="{{ vv.featured_image | image_url: width: 900 }}"{% endif %}></button>
+        {%- endfor -%}
+      </div>
+    {%- else -%}<span></span>{%- endif -%}
+    {%- if quick or color_idx >= 0 and product.options.size == 1 -%}
+      <button type="button" class="btn btn-sm" data-quick-add data-variant-id="{{ fv.id }}" data-label="{{ 'products.add' | t }}" data-soldout="{{ 'products.sold_out' | t }}" {% unless fv.available %}disabled{% endunless %}>{% if fv.available %}{{ 'products.add' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif %}</button>
+    {%- else -%}
+      <a class="btn btn-sm btn--ghost" href="{{ product.url }}">{{ 'products.choose' | t }}</a>
+    {%- endif -%}
+  </div>
+</article>

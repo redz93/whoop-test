@@ -1,0 +1,31 @@
+{%- assign lines = section.settings.heading | split: '
+' -%}
+<section class="hero" style="--accent:{{ section.settings.accent }}">
+  <div class="hero__bg"></div>
+  <div class="hero__media" aria-hidden="{% if section.settings.image == blank %}true{% else %}false{% endif %}">
+    {%- if section.settings.image != blank -%}{{ section.settings.image | image_url: width: 1800 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '800, 1200, 1800', sizes: '(min-width:1000px) 62vw, 100vw', alt: section.settings.image_alt }}{%- else -%}<div class="hero__strap"></div>{%- endif -%}
+  </div>
+  <div class="wrap hero__in">
+    <h1 class="display hero__title">
+      {%- for l in lines -%}{%- assign t = l | strip -%}{%- if t != blank -%}<span class="ln"><span{% if forloop.last and lines.size > 1 %} class="grad"{% endif %}>{{ t }}</span></span>{%- endif -%}{%- endfor -%}
+    </h1>
+    {%- if section.settings.subheading != blank -%}<p class="lead hero__sub">{{ section.settings.subheading }}</p>{%- endif -%}
+    <div class="hero__cta">
+      {%- if section.settings.cta_label != blank -%}<a class="btn" href="{{ section.settings.cta_link | default: routes.all_products_url }}">{{ section.settings.cta_label }}</a>{%- endif -%}
+      {%- if section.settings.cta2_label != blank -%}<a class="btn btn--ghost" href="{{ section.settings.cta2_link | default: routes.collections_url }}">{{ section.settings.cta2_label }}</a>{%- endif -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{"name":"Hero","settings":[
+{"type":"image_picker","id":"image","label":"Visuel (WHOOP + bracelet, fond sombre)"},
+{"type":"text","id":"image_alt","label":"Texte alternatif","default":"Appareil WHOOP avec bracelet premium"},
+{"type":"textarea","id":"heading","label":"Titre (une ligne par retour)","default":"Change your look.\nNot your routine."},
+{"type":"text","id":"subheading","label":"Sous-titre","default":"Le bracelet qui s'adapte à chaque moment de ta journée."},
+{"type":"text","id":"cta_label","label":"Bouton principal","default":"Découvrir la collection"},
+{"type":"url","id":"cta_link","label":"Lien principal"},
+{"type":"text","id":"cta2_label","label":"Bouton secondaire","default":"Trouver mon style"},
+{"type":"url","id":"cta2_link","label":"Lien secondaire"},
+{"type":"color","id":"accent","label":"Couleur d'accent du hero","default":"#7C5CFF"}
+],"presets":[{"name":"Hero"}]}
+{% endschema %}

@@ -1,0 +1,23 @@
+<section class="section">
+  <div class="wrap">
+    <div class="head-row reveal"><h2 class="h2">{{ section.settings.heading }}</h2></div>
+    <div class="ben">
+      {%- for block in section.blocks -%}
+        <div class="ben__i reveal" style="--d:{{ forloop.index0 | times: 0.06 }}s" {{ block.shopify_attributes }}>{% render 'icon', name: block.settings.icon %}<h3>{{ block.settings.title }}</h3><p>{{ block.settings.text }}</p></div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{"name":"Avantages","settings":[{"type":"text","id":"heading","label":"Titre","default":"Pensé pour ta routine"}],
+"blocks":[{"type":"benefit","name":"Avantage","settings":[
+{"type":"select","id":"icon","label":"Icône","default":"swap","options":[{"value":"swap","label":"Échange"},{"value":"layers","label":"Styles"},{"value":"heart","label":"Confort"},{"value":"sparkle","label":"Look"},{"value":"watch","label":"Montre"}]},
+{"type":"text","id":"title","label":"Titre"},{"type":"text","id":"text","label":"Texte"}]}],
+"max_blocks":5,
+"presets":[{"name":"Avantages","blocks":[
+{"type":"benefit","settings":{"icon":"swap","title":"Change en quelques secondes","text":"Un geste simple pour renouveler ton look."}},
+{"type":"benefit","settings":{"icon":"layers","title":"Plusieurs styles, une routine","text":"Ton suivi reste le même, ton style évolue."}},
+{"type":"benefit","settings":{"icon":"heart","title":"Confort au quotidien","text":"Pensé pour être porté toute la journée."}},
+{"type":"benefit","settings":{"icon":"sparkle","title":"Un look par occasion","text":"Sport, bureau, soirée, voyage."}},
+{"type":"benefit","settings":{"icon":"watch","title":"Compatible WHOOP","text":"Vérifie la génération sur chaque fiche produit."}}]}]}
+{% endschema %}

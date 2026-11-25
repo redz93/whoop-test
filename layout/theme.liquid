@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.color_bg }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+  {%- if settings.favicon != blank -%}<link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64 }}">{%- endif -%}
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  <title>{{ page_title }}{% unless page_title contains shop.name %} – {{ shop.name }}{% endunless %}</title>
+  {% render 'meta-tags' %}
+  <script>document.documentElement.classList.add('js');window.themeRoot={{ routes.root_url | json }};</script>
+  {% style %}
+    {{ settings.font_heading | font_face: font_display: 'swap' }}
+    {{ settings.font_body | font_face: font_display: 'swap' }}
+    :root{
+      --bg:{{ settings.color_bg }};--surface:{{ settings.color_surface }};--text:{{ settings.color_text }};--muted:{{ settings.color_muted }};
+      --accent:{{ settings.color_accent }};--accent-2:{{ settings.color_accent_2 }};
+      --font-h:{{ settings.font_heading.family }},{{ settings.font_heading.fallback_families }};
+      --font-b:{{ settings.font_body.family }},{{ settings.font_body.fallback_families }};
+    }
+  {% endstyle %}
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+  {{ content_for_header }}
+</head>
+<body class="template-{{ template.name | handle }}">
+  <a class="skip" href="#main">{{ 'general.skip' | t }}</a>
+  {% section 'header' %}
+  <main id="main" tabindex="-1">{{ content_for_layout }}</main>
+  {% section 'footer' %}
+  {% section 'cart-drawer' %}
+</body>
+</html>

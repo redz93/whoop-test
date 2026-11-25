@@ -1,0 +1,27 @@
+<section class="section">
+  <div class="wrap">
+    <div class="head-row reveal"><h2 class="h2">{{ section.settings.heading | newline_to_br }}</h2></div>
+    <div class="uni">
+      {%- for block in section.blocks -%}
+        <a class="uni__item reveal" style="--uc:{{ block.settings.color }};--d:{{ forloop.index0 | times: 0.07 }}s" href="{{ block.settings.link | default: routes.all_products_url }}" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}{{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '450, 700, 900', sizes: '(min-width:1000px) 24vw, 50vw', alt: '' }}{%- endif -%}
+          <h3>{{ block.settings.title }}</h3><p>{{ block.settings.text }}</p>
+          <span class="link-u" style="align-self:flex-start">{{ block.settings.cta | default: 'Découvrir' }}</span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{"name":"Un bracelet pour chaque occasion","settings":[{"type":"textarea","id":"heading","label":"Titre","default":"Un bracelet\npour chaque occasion."}],
+"blocks":[{"type":"universe","name":"Univers","settings":[
+{"type":"text","id":"title","label":"Titre","default":"Training"},{"type":"text","id":"text","label":"Ambiance"},
+{"type":"image_picker","id":"image","label":"Photo"},{"type":"url","id":"link","label":"Lien"},
+{"type":"text","id":"cta","label":"Bouton","default":"Découvrir"},{"type":"color","id":"color","label":"Couleur","default":"#7C5CFF"}]}],
+"max_blocks":6,
+"presets":[{"name":"Occasions","blocks":[
+{"type":"universe","settings":{"title":"Training","text":"Sueur, rythme, énergie. Un bracelet qui suit.","color":"#FF5A1F"}},
+{"type":"universe","settings":{"title":"Work","text":"Sobre et net, de la visio à la réunion.","color":"#1F5BFF"}},
+{"type":"universe","settings":{"title":"Street","text":"Contrastes forts pour la ville.","color":"#C6FF00"}},
+{"type":"universe","settings":{"title":"Weekend","text":"Couleurs détendues, look décontracté.","color":"#D8C4A0"}}]}]}
+{% endschema %}

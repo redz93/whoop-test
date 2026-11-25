@@ -1,0 +1,37 @@
+<header class="header" data-header>
+  <div class="wrap">
+    <a class="logo" href="{{ routes.root_url }}" aria-label="{{ settings.brand_name | escape }}">
+      {%- if settings.logo != blank -%}{{ settings.logo | image_url: width: 240 | image_tag: loading: 'eager', alt: settings.brand_name }}{%- else -%}{{ settings.brand_name }}{%- endif -%}
+    </a>
+    <nav class="nav" aria-label="Navigation principale">
+      {%- if section.settings.menu != blank and section.settings.menu.links.size > 0 -%}
+        {%- for link in section.settings.menu.links -%}<a href="{{ link.url }}" {% if link.active %}aria-current="page"{% endif %}>{{ link.title }}</a>{%- endfor -%}
+      {%- else -%}
+        <a href="{{ routes.all_products_url }}">{{ 'general.shop' | t }}</a>
+        <a href="{{ routes.collections_url }}">{{ 'general.collections' | t }}</a>
+      {%- endif -%}
+    </nav>
+    <div class="icons">
+      <button class="icon-btn" type="button" data-search-toggle aria-label="{{ 'general.search' | t }}">{% render 'icon', name: 'search' %}</button>
+      <button class="icon-btn" type="button" data-cart-open aria-label="{{ 'general.cart' | t }}">{% render 'icon', name: 'bag' %}<span class="badge-count" data-cart-count data-count="{{ cart.item_count }}">{{ cart.item_count }}</span></button>
+      <button class="icon-btn burger" type="button" data-burger aria-expanded="false" aria-controls="mmenu" aria-label="{{ 'general.menu' | t }}">{% render 'icon', name: 'menu' %}</button>
+    </div>
+  </div>
+</header>
+<div class="mmenu" id="mmenu">
+  {%- if section.settings.menu != blank and section.settings.menu.links.size > 0 -%}
+    {%- for link in section.settings.menu.links -%}<a href="{{ link.url }}">{{ link.title }}</a>{%- endfor -%}
+  {%- else -%}
+    <a href="{{ routes.all_products_url }}">{{ 'general.shop' | t }}</a><a href="{{ routes.collections_url }}">{{ 'general.collections' | t }}</a>
+  {%- endif -%}
+</div>
+<div class="search-pop" id="search-pop" role="search">
+  <form action="{{ routes.search_url }}" method="get">
+    <input class="field" type="search" name="q" placeholder="{{ 'search.placeholder' | t }}" aria-label="{{ 'general.search' | t }}">
+    <input type="hidden" name="type" value="product">
+    <button class="btn" type="submit">{{ 'general.search' | t }}</button>
+  </form>
+</div>
+{% schema %}
+{"name":"En-tête","settings":[{"type":"link_list","id":"menu","label":"Menu","default":"main-menu"}]}
+{% endschema %}

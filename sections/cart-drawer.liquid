@@ -1,0 +1,38 @@
+<div class="overlay" aria-hidden="true"></div>
+<aside class="drawer" id="cart-drawer" role="dialog" aria-modal="true" aria-label="{{ 'general.cart' | t }}" aria-hidden="true">
+  <div class="drawer__in" data-cart-inner data-count="{{ cart.item_count }}">
+    <div class="drawer__head"><h2>{{ 'cart.title' | t }}</h2><button class="icon-btn" type="button" data-cart-close aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button></div>
+    {%- if cart.item_count == 0 -%}
+      <div class="drawer__empty"><p>{{ 'cart.empty' | t }}</p><a class="btn" href="{{ routes.all_products_url }}">{{ 'cart.continue' | t }}</a></div>
+    {%- else -%}
+      <div class="drawer__body">
+        {%- for item in cart.items -%}
+          <div class="line">
+            <a class="line__img" href="{{ item.url }}">{%- if item.image -%}{{ item.image | image_url: width: 200 | image_tag: loading: 'lazy', alt: item.product.title }}{%- endif -%}</a>
+            <div>
+              <a class="line__t" href="{{ item.url }}">{{ item.product.title }}</a>
+              {%- unless item.product.has_only_default_variant -%}<p class="line__v">{{ item.variant.title }}</p>{%- endunless -%}
+              <div class="line__row">
+                <div class="qty qty--sm">
+                  <button type="button" data-line-change data-line="{{ forloop.index }}" data-qty="{{ item.quantity | minus: 1 }}" aria-label="-1">−</button>
+                  <span style="min-width:30px;text-align:center;font-weight:700">{{ item.quantity }}</span>
+                  <button type="button" data-line-change data-line="{{ forloop.index }}" data-qty="{{ item.quantity | plus: 1 }}" aria-label="+1">+</button>
+                </div>
+                <span class="price">{{ item.final_line_price | money }}</span>
+              </div>
+              <button type="button" class="rm" data-line-change data-line="{{ forloop.index }}" data-qty="0">{{ 'cart.remove' | t }}</button>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+      <div class="drawer__foot">
+        <div class="sub"><span>{{ 'cart.subtotal' | t }}</span><span>{{ cart.total_price | money }}</span></div>
+        <p class="note">{{ 'cart.note' | t }}</p>
+        <form action="{{ routes.cart_url }}" method="post"><button class="btn btn--full" type="submit" name="checkout">{{ 'cart.checkout' | t }}</button></form>
+      </div>
+    {%- endif -%}
+  </div>
+</aside>
+{% schema %}
+{"name":"Panier latéral"}
+{% endschema %}

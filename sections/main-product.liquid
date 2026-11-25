@@ -1,0 +1,37 @@
+{%- liquid
+  assign cur = product.selected_or_first_available_variant
+-%}
+<section class="pad-top section" style="padding-top:calc(var(--head) + 32px);padding-bottom:40px">
+  <div class="wrap pdp">
+    <div class="gallery" data-gallery>
+      {%- for media in product.media -%}
+        <figure data-media-id="{{ media.id }}" {% if media.media_type == 'image' %}data-zoom{% endif %}>
+          {%- if media.media_type == 'image' -%}
+            {%- assign ld = 'lazy' -%}{%- if forloop.first -%}{%- assign ld = 'eager' -%}{%- endif -%}
+            {%- assign alt_txt = media.alt | default: product.title -%}
+            {{ media | image_url: width: 1400 | image_tag: widths: '500, 800, 1100, 1400', sizes: '(min-width:1000px) 48vw, 90vw', loading: ld, alt: alt_txt }}
+          {%- else -%}{{ media | media_tag: image_size: '1400x', loading: 'lazy' }}{%- endif -%}
+        </figure>
+      {%- else -%}
+        <figure><div class="feat__img" style="height:100%;border-radius:0"></div></figure>
+      {%- endfor -%}
+    </div>
+    <div class="pdp__info">
+      <h1>{{ product.title }}</h1>
+      {%- if product.description != blank -%}<div class="prose" style="margin-bottom:26px">{{ product.description }}</div>{%- endif -%}
+      {% render 'buy-box', product: product, sid: section.id, sync_url: true %}
+      <div class="acc" style="margin-top:32px">
+        <details open><summary>{{ 'products.shipping' | t }}</summary><div class="acc__b">{{ settings.info_shipping | newline_to_br }}</div></details>
+        <details><summary>{{ 'products.returns' | t }}</summary><div class="acc__b">{{ settings.info_returns | newline_to_br }}</div></details>
+        <details><summary>{{ 'products.compat' | t }}</summary><div class="acc__b">{{ product.metafields.custom.compatibility | default: settings.info_compat | newline_to_br }}</div></details>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="sticky-atc" data-sticky="{{ section.id }}">
+  <b data-sticky-price>{{ cur.price | money }}</b>
+  <button type="button" class="btn" {% unless cur.available %}disabled{% endunless %}>{{ 'products.add' | t }}</button>
+</div>
+{% schema %}
+{"name":"Fiche produit"}
+{% endschema %}

@@ -1,0 +1,32 @@
+<section class="section">
+  <div class="wrap concept">
+    <div class="reveal">
+      <h2 class="h2">{{ section.settings.heading | newline_to_br }}</h2>
+      <p class="lead" style="margin-top:24px">{{ section.settings.text }}</p>
+      {%- if section.settings.cta_label != blank -%}<a class="btn btn--ghost" style="margin-top:32px" href="{{ section.settings.cta_link | default: routes.all_products_url }}">{{ section.settings.cta_label }}</a>{%- endif -%}
+    </div>
+    <div class="chips">
+      {%- for block in section.blocks -%}
+        <div class="chip reveal" style="--chip:{{ block.settings.color }};--d:{{ forloop.index0 | times: 0.07 }}s" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}{{ block.settings.image | image_url: width: 700 | image_tag: loading: 'lazy', widths: '350, 500, 700', sizes: '(min-width:1000px) 22vw, 45vw', alt: '' }}{%- endif -%}
+          <h3>{{ block.settings.title }}</h3>
+          {%- if block.settings.text != blank -%}<p>{{ block.settings.text }}</p>{%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{"name":"Concept","settings":[
+{"type":"textarea","id":"heading","label":"Titre","default":"Une seule montre.\nUne infinité de styles."},
+{"type":"textarea","id":"text","label":"Texte","default":"Plus besoin de garder le même bracelet toute la journée. Change en quelques secondes selon ce que tu fais, où tu vas et comment tu t'habilles."},
+{"type":"text","id":"cta_label","label":"Bouton","default":"Voir tous les bracelets"},
+{"type":"url","id":"cta_link","label":"Lien"}],
+"blocks":[{"type":"occasion","name":"Occasion","settings":[
+{"type":"text","id":"title","label":"Titre","default":"Sport"},
+{"type":"text","id":"text","label":"Texte"},
+{"type":"image_picker","id":"image","label":"Image"},
+{"type":"color","id":"color","label":"Couleur","default":"#7C5CFF"}]}],
+"max_blocks":6,
+"presets":[{"name":"Concept","blocks":[{"type":"occasion","settings":{"title":"Sport","color":"#FF5A1F"}},{"type":"occasion","settings":{"title":"Travail","color":"#1F5BFF"}},{"type":"occasion","settings":{"title":"Ville","color":"#7C5CFF"}},{"type":"occasion","settings":{"title":"Sorties","color":"#D81F3A"}},{"type":"occasion","settings":{"title":"Voyages","color":"#00E5FF"}},{"type":"occasion","settings":{"title":"Quotidien","color":"#C6FF00"}}]}]}
+{% endschema %}

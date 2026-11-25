@@ -1,0 +1,26 @@
+{%- assign product = section.settings.product -%}
+<section class="section">
+  <div class="wrap">
+    {%- if product == blank -%}
+      <div class="empty">{{ 'general.no_products' | t }}</div>
+    {%- else -%}
+    <div class="feat">
+      <div class="feat__img reveal" data-zoom>
+        {%- if product.featured_media -%}{{ product.featured_media | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '600, 900, 1400', sizes: '(min-width:1000px) 50vw, 100vw', alt: product.title }}{%- endif -%}
+      </div>
+      <div class="reveal" style="--d:.1s">
+        <h2 class="h2">{{ product.title }}</h2>
+        <div class="prose" style="margin-top:20px">{{ product.description | strip_html | truncate: 220 }}</div>
+        <ul class="points">{%- for block in section.blocks -%}<li {{ block.shopify_attributes }}>{% render 'icon', name: 'check' %}{{ block.settings.text }}</li>{%- endfor -%}</ul>
+        {% render 'buy-box', product: product, sid: section.id %}
+        <a class="link-u" style="display:inline-block;margin-top:22px" href="{{ product.url }}">{{ 'general.view_all' | t }}</a>
+      </div>
+    </div>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{"name":"Produit vedette","settings":[{"type":"product","id":"product","label":"Produit"}],
+"blocks":[{"type":"point","name":"Point fort","settings":[{"type":"text","id":"text","label":"Texte","default":"Change de style en quelques secondes"}]}],
+"presets":[{"name":"Produit vedette","blocks":[{"type":"point","settings":{"text":"Change de style en quelques secondes"}},{"type":"point","settings":{"text":"Confort pensé pour le quotidien"}},{"type":"point","settings":{"text":"Un look pour chaque occasion"}}]}]}
+{% endschema %}

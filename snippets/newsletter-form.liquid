@@ -1,0 +1,9 @@
+{%- form 'customer', id: form_id, class: 'nl-form' -%}
+  <input type="hidden" name="contact[tags]" value="newsletter">
+  {%- if form.posted_successfully? -%}<p class="msg msg--ok" role="status">{{ 'newsletter.success' | t }}</p>{%- else -%}
+  <label class="sr-only" for="{{ form_id }}-email">{{ 'newsletter.placeholder' | t }}</label>
+  <input id="{{ form_id }}-email" class="field" type="email" name="contact[email]" required autocomplete="email" placeholder="{{ 'newsletter.placeholder' | t }}" value="{{ form.email }}">
+  <button class="btn" type="submit">{{ 'newsletter.submit' | t }}</button>
+  {%- endif -%}
+  {%- if form.errors -%}<p class="msg msg--err" role="alert">{{ 'newsletter.error' | t }}</p>{%- endif -%}
+{%- endform -%}

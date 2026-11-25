@@ -1,0 +1,9 @@
+{
+  "general":{"skip":"Aller au contenu","search":"Rechercher","cart":"Panier","menu":"Menu","close":"Fermer","view_all":"Tout voir","discover":"Découvrir","no_products":"Aucun produit pour le moment. Ajoutez des produits dans Shopify Admin > Produits.","shop":"Boutique","collections":"Collections","home":"Accueil"},
+  "products":{"add":"Ajouter au panier","choose":"Choisir","sold_out":"Épuisé","sale":"Promo","in_stock":"En stock","low_stock":"Plus que {n} en stock","quantity":"Quantité","shipping":"Livraison","returns":"Retours","compat":"Compatibilité","unavailable":"Indisponible","new":"Nouveau"},
+  "cart":{"title":"Ton panier","empty":"Ton panier est vide.","continue":"Continuer mes achats","subtotal":"Sous-total","checkout":"Passer au paiement","remove":"Retirer","note":"Taxes incluses. Livraison calculée au paiement.","update":"Mettre à jour"},
+  "newsletter":{"placeholder":"Ton adresse e-mail","submit":"S'inscrire","success":"Merci, tu es inscrit(e).","error":"Adresse e-mail invalide. Vérifie-la et réessaie."},
+  "search":{"placeholder":"Rechercher un bracelet","no_results":"Aucun résultat pour « {{ terms }} ». Essaie un autre mot ou parcours la boutique."},
+  "collection":{"filters":"Filtres","empty":"Aucun produit dans cette collection."},
+  "page_404":{"title":"Page introuvable","text":"Cette page n'existe pas ou a été déplacée.","cta":"Retour à la boutique"}
+}

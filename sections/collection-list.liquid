@@ -1,0 +1,33 @@
+<section class="section">
+  <div class="wrap">
+    <div class="head-row reveal"><h2 class="h2">{{ section.settings.heading }}</h2>{%- if section.settings.show_all -%}<a class="link-u" href="{{ routes.collections_url }}">{{ 'general.view_all' | t }}</a>{%- endif -%}</div>
+    <div class="tiles">
+      {%- for block in section.blocks -%}
+        {%- assign c = block.settings.collection -%}
+        {%- assign img = block.settings.image | default: c.featured_image -%}
+        <a class="tile reveal" style="--tc:{{ block.settings.color }};--d:{{ forloop.index0 | times: 0.06 }}s" href="{{ c.url | default: routes.collections_url }}" {{ block.shopify_attributes }}>
+          {%- if img != blank -%}{{ img | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width:1000px) 45vw, 100vw', alt: '' }}{%- endif -%}
+          <h3>{{ block.settings.title | default: c.title }}</h3>
+          <p>{{ block.settings.text | default: c.description | strip_html | truncate: 90 }}</p>
+          <span class="cta">{{ 'general.discover' | t }} <span aria-hidden="true">→</span></span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{"name":"Collections","settings":[{"type":"text","id":"heading","label":"Titre","default":"Choisis ton univers"},{"type":"checkbox","id":"show_all","label":"Afficher « Tout voir »","default":true}],
+"blocks":[{"type":"collection","name":"Collection","settings":[
+{"type":"collection","id":"collection","label":"Collection Shopify"},
+{"type":"text","id":"title","label":"Titre (sinon nom de la collection)"},
+{"type":"text","id":"text","label":"Description courte (sinon description de la collection)"},
+{"type":"image_picker","id":"image","label":"Image (sinon image de la collection)"},
+{"type":"color","id":"color","label":"Couleur d'accent","default":"#7C5CFF"}]}],
+"max_blocks":6,
+"presets":[{"name":"Collections","blocks":[
+{"type":"collection","settings":{"title":"Sport","text":"Performance & entraînement.","color":"#FF5A1F"}},
+{"type":"collection","settings":{"title":"Daily","text":"Minimalisme & quotidien.","color":"#1F5BFF"}},
+{"type":"collection","settings":{"title":"Night","text":"Style & sorties.","color":"#7C5CFF"}},
+{"type":"collection","settings":{"title":"Color","text":"Couleurs & expression.","color":"#C6FF00"}},
+{"type":"collection","settings":{"title":"Premium","text":"Matières & finitions premium.","color":"#D8C4A0"}}]}]}
+{% endschema %}

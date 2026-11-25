@@ -1,0 +1,49 @@
+{%- comment -%} Params : product, sid (id unique), sync_url (bool) {%- endcomment -%}
+{%- liquid
+  assign cur = product.selected_or_first_available_variant
+  assign sync = sync_url | default: false
+-%}
+{%- assign t_add = 'products.add' | t -%}
+{%- assign t_out = 'products.sold_out' | t -%}
+{%- assign t_in = 'products.in_stock' | t -%}
+{%- assign t_low = 'products.low_stock' | t -%}
+{%- assign t_na = 'products.unavailable' | t -%}
+{%- form 'product', product, id: sid, class: 'buy', novalidate: 'novalidate', data-product-form: sid, data-sync-url: sync, data-add: t_add, data-soldout: t_out, data-instock: t_in, data-low: t_low, data-unavailable: t_na -%}
+  <input type="hidden" name="id" value="{{ cur.id }}">
+  <div class="buy__price" data-price>{% render 'price', price: cur.price, compare_at_price: cur.compare_at_price %}</div>
+  {%- unless product.has_only_default_variant -%}
+    {%- for o in product.options_with_values -%}
+      {%- assign oi = forloop.index0 -%}
+      {%- assign on = o.name | downcase -%}
+      {%- assign is_color = false -%}
+      {%- if on == 'couleur' or on == 'color' or on == 'colour' or on == 'coloris' -%}{%- assign is_color = true -%}{%- endif -%}
+      <fieldset class="opt">
+        <legend>{{ o.name }}<span data-opt-label="{{ oi }}">{{ o.selected_value }}</span></legend>
+        <div class="opt__vals">
+          {%- for val in o.values -%}
+            {%- if is_color -%}
+              {%- capture sw_color -%}{% render 'swatch-color', value: val %}{%- endcapture -%}
+              <label class="sw sw-big" style="--sw:{{ sw_color }}" title="{{ val | escape }}"><input type="radio" name="opt{{ oi }}" value="{{ val | escape }}" {% if val == o.selected_value %}checked{% endif %} aria-label="{{ val | escape }}"></label>
+            {%- else -%}
+              <label class="pill"><input type="radio" name="opt{{ oi }}" value="{{ val | escape }}" {% if val == o.selected_value %}checked{% endif %}><span>{{ val }}</span></label>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </fieldset>
+    {%- endfor -%}
+  {%- else -%}
+    <input type="radio" name="opt0" value="{{ cur.options[0] | escape }}" checked hidden>
+  {%- endunless -%}
+  <div class="stock{% unless cur.available %} out{% endunless %}" data-stock role="status"><i></i><span>{% if cur.available %}{{ 'products.in_stock' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif %}</span></div>
+  <div class="buy__row">
+    <div class="qty" role="group" aria-label="{{ 'products.quantity' | t }}">
+      <button type="button" data-qty="-1" aria-label="-1">−</button>
+      <input type="number" name="quantity" value="1" min="1" inputmode="numeric" aria-label="{{ 'products.quantity' | t }}">
+      <button type="button" data-qty="1" aria-label="+1">+</button>
+    </div>
+    <button type="submit" class="btn" data-submit {% unless cur.available %}disabled{% endunless %}>{% if cur.available %}{{ 'products.add' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif %}</button>
+  </div>
+  <script type="application/json" data-variants>
+  [{%- for v in product.variants -%}{"id":{{ v.id }},"options":{{ v.options | json }},"price":{{ v.price | money | json }},"compare":{% if v.compare_at_price > v.price %}{{ v.compare_at_price | money | json }}{% else %}null{% endif %},"available":{{ v.available }},"low":{% if v.inventory_management and v.inventory_quantity > 0 and v.inventory_quantity < 6 %}{{ v.inventory_quantity }}{% else %}0{% endif %},"media":{{ v.featured_media.id | default: 'null' }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]
+  </script>
+{%- endform -%}

@@ -1,0 +1,33 @@
+{%- paginate collection.products by section.settings.per_page -%}
+<section class="section" style="padding-top:calc(var(--head) + 32px)">
+  <div class="wrap">
+    <div class="coll-hero">
+      {%- if collection.image -%}{{ collection.image | image_url: width: 1800 | image_tag: loading: 'eager', alt: '' }}{%- endif -%}
+      <h1 class="display" style="font-size:clamp(2.4rem,8vw,6.5rem)">{{ collection.title }}</h1>
+      {%- if collection.description != blank -%}<div class="lead" style="margin-top:16px">{{ collection.description | strip_html | truncate: 220 }}</div>{%- endif -%}
+    </div>
+    <form class="filters" method="get" data-auto-submit>
+      {%- for f in collection.filters -%}
+        {%- if f.type == 'list' -%}
+          <details class="fgroup"><summary>{{ f.label }}{% if f.active_values.size > 0 %} ({{ f.active_values.size }}){% endif %}</summary>
+            <div class="fgroup__p">{%- for v in f.values -%}<label><input type="checkbox" name="{{ v.param_name }}" value="{{ v.value }}" {% if v.active %}checked{% endif %} {% if v.count == 0 and v.active == false %}disabled{% endif %}> {{ v.label }} ({{ v.count }})</label>{%- endfor -%}</div>
+          </details>
+        {%- endif -%}
+      {%- endfor -%}
+      <select name="sort_by" aria-label="Trier">
+        {%- assign sort = collection.sort_by | default: collection.default_sort_by -%}
+        {%- for o in collection.sort_options -%}<option value="{{ o.value }}" {% if o.value == sort %}selected{% endif %}>{{ o.name }}</option>{%- endfor -%}
+      </select>
+      <noscript><button class="btn btn-sm" type="submit">OK</button></noscript>
+    </form>
+    <div class="grid">
+      {%- for product in collection.products -%}<div class="reveal">{% render 'product-card', product: product %}</div>
+      {%- else -%}<div class="empty">{{ 'collection.empty' | t }}</div>{%- endfor -%}
+    </div>
+    {%- if paginate.pages > 1 -%}<div class="pagination">{{ paginate | default_pagination }}</div>{%- endif -%}
+  </div>
+</section>
+{%- endpaginate -%}
+{% schema %}
+{"name":"Page collection","settings":[{"type":"range","id":"per_page","label":"Produits par page","min":6,"max":24,"step":3,"default":12}]}
+{% endschema %}
